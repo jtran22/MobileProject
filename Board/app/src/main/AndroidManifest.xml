@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".IndividualEventPage"></activity>
+        <activity android:name=".ListEventsActivity"></activity>
+        <activity android:name=".SwipeEventActivity" />
+        <activity android:name=".IndividualEventPage" />
         <activity android:name=".MyEventsActivity" />
         <activity android:name=".CameraActivity" />
         <activity android:name=".EditActivity" />
