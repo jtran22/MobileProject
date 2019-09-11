@@ -15,7 +15,7 @@
         android:layout_width="258dp"
         android:layout_height="111dp"
         android:layout_marginTop="84dp"
-        android:fontFamily="@font/Fontania"
+        android:fontFamily="@font/fontania"
         android:text="BOARD"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
