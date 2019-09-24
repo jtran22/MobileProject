@@ -7,17 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_sign_up);
 
-        TextView t2 = findViewById(R.id.tvLinkSignUp);
+        TextView tvLoginLink = findViewById(R.id.tvLoginLink);
 
-        t2.setOnClickListener(new View.OnClickListener() {
+        tvLoginLink.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent loginIntent = new Intent(v.getContext(), SignUpActivity.class);
+                Intent loginIntent = new Intent(v.getContext(), SignInActivity.class);
                 startActivity(loginIntent);
             }
         });
