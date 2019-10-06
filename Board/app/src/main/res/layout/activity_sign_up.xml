@@ -7,14 +7,45 @@
     android:background="@color/background_theme"
     tools:context=".SignUpActivity">
 
+    <TextView
+        android:id="@+id/tvPasswordReq"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/poetsen"
+        android:text="@string/password_req"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/btSignIn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPasswordRe" />
+
+    <EditText
+        android:id="@+id/etPasswordRe"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="9dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="Retype Password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/tvPasswordReq"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="323dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="14dp"
         android:ems="10"
         android:fontFamily="@font/roboto"
         android:hint="Email"
@@ -26,17 +57,16 @@
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="323dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="17dp"
         android:ems="10"
         android:fontFamily="@font/roboto"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/btSignIn"
+        app:layout_constraintBottom_toTopOf="@+id/etPasswordRe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etEmail" />
@@ -45,55 +75,47 @@
         android:id="@+id/tvSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="55dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="44dp"
         android:fontFamily="@font/poetsen"
         android:text="Sign Up"
         android:textColor="@color/header_theme"
         android:textSize="45dp"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvSignUp2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvSignUp2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:layout_marginEnd="23dp"
-        android:layout_marginBottom="55dp"
         android:fontFamily="@font/poetsen"
         android:text="Sign Up"
         android:textColor="#FFFFFF"
         android:textSize="45dp"
-        app:layout_constraintBottom_toTopOf="@+id/etEmail"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvSignUp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.589"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/btn_rounded"
-        android:textColor="@android:color/white"
         android:text="Button"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/tvLoginLink"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPasswordReq" />
 
     <TextView
         android:id="@+id/tvLoginLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="47dp"
-        android:layout_marginBottom="210dp"
+        android:layout_marginBottom="220dp"
         android:fontFamily="@font/poetsen"
         android:text="Have an account? Login here"
         android:textColor="#0097A7"
@@ -101,4 +123,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btSignIn" />
+
+    <ImageButton
+        android:id="@+id/btViewPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintEnd_toEndOf="@+id/etPassword"
+        app:layout_constraintTop_toTopOf="@+id/etPassword"
+        app:srcCompat="@android:drawable/ic_menu_view" />
+
+    <ImageButton
+        android:id="@+id/btViewPasswordRe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintEnd_toEndOf="@+id/etPasswordRe"
+        app:layout_constraintTop_toTopOf="@+id/etPasswordRe"
+        app:srcCompat="@android:drawable/ic_menu_view" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
