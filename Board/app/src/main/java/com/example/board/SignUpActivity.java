@@ -32,6 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageButton btViewPassRe;
     boolean showingPass = false;
     boolean showingRe = false;
+    Intent signIn;
 
 
     @Override
