@@ -2,4 +2,5 @@
     <string name="app_name">Board</string>
     <color name="background_theme">#DEF1F0</color>
     <color name="header_theme">#F1E2DD</color>
+    <string name="password_req">Use 8 or more characters with a mix of letters, numbers &amp; symbols</string>
 </resources>
