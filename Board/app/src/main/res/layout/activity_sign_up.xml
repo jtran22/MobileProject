@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_theme"
+    android:background="@color/header_theme"
     tools:context=".SignUpActivity">
 
     <EditText
@@ -50,7 +50,7 @@
         android:layout_marginBottom="55dp"
         android:fontFamily="@font/poetsen"
         android:text="Sign Up"
-        android:textColor="@color/header_theme"
+        android:textColor="@color/background_theme"
         android:textSize="45dp"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
         app:layout_constraintEnd_toEndOf="parent"
