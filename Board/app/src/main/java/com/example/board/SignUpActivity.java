@@ -32,8 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageButton btViewPassRe;
     boolean showingPass = false;
     boolean showingRe = false;
-    Intent signIn;
-
+//    Intent signIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

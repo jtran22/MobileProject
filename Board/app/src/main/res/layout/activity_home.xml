@@ -4,6 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_theme"
     tools:context=".HomeActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHomeScreen">
+
+        <Button
+            android:id="@+id/bt_go_events"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/header_theme"
+            android:background="@android:color/transparent"
+            android:text="@string/btn_go_events" />
+
+        <Button
+            android:id="@+id/bt_find_events"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/header_theme"
+            android:background="@android:color/transparent"
+            android:text="@string/btn_find_events" />
+
+        <Button
+            android:id="@+id/bt_post_events"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/header_theme"
+            android:background="@android:color/transparent"
+            android:text="@string/btn_post_events" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvHomeScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="510dp"
+        android:fontFamily="@font/poetsen"
+        android:text="Hello, User"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.072"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

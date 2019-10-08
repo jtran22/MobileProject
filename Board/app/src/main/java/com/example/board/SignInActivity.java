@@ -48,8 +48,6 @@ public class SignInActivity extends AppCompatActivity {
             //startActivity(loginIntent)
         }
 
-
-
         btSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

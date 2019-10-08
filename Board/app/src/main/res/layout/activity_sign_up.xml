@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/header_theme"
+    android:background="@color/background_theme"
     tools:context=".SignUpActivity">
 
     <TextView
@@ -80,7 +80,7 @@
         android:layout_marginBottom="44dp"
         android:fontFamily="@font/poetsen"
         android:text="Sign Up"
-        android:textColor="@color/background_theme"
+        android:textColor="@color/header_theme"
         android:textSize="45dp"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
         app:layout_constraintStart_toStartOf="@+id/tvSignUp2"
