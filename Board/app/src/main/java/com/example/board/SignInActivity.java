@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity {
+    public static final String SIGN_IN = "Sign In";
     private FirebaseAuth mAuth;
     private Button btSignIn;
     private EditText etEmail;
@@ -49,12 +50,21 @@ public class SignInActivity extends AppCompatActivity {
         }
 
 
-
         btSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String email = etEmail.getText().toString();
                 final String password = etPassword.getText().toString();
+
+                if(email.isEmpty()){
+                    etEmail.setError("Email required.");
+                    return;
+                }
+
+                if(password.isEmpty()){
+                    etPassword.setError("Password required.");
+                    return;
+                }
 
                 mAuth.signInWithEmailAndPassword(email,password)
                         .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
@@ -62,14 +72,14 @@ public class SignInActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    Log.d("Sign In", "signInWithEmail:success");
+                                    Log.d(SIGN_IN, "signInWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     loginIntent = new Intent(SignInActivity.this,HomeActivity.class);
                                     startActivity(loginIntent);
                                     //updateUI(user);
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Log.w("Sign In", "signInWithEmail:failure", task.getException());
+                                    Log.w(SIGN_IN, "signInWithEmail:failure", task.getException());
                                     Toast.makeText(SignInActivity.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                     //updateUI(null);

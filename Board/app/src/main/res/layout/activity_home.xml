@@ -6,4 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <TextView
+        android:id="@+id/tvTest"
+        android:layout_width="172dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginBottom="85dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/btPost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="39dp"
+        android:layout_marginBottom="464dp"
+        android:text="Post"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvTest"
+        app:layout_constraintTop_toBottomOf="@+id/tvTest" />
 </androidx.constraintlayout.widget.ConstraintLayout>

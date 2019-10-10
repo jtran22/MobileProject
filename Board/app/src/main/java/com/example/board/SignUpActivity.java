@@ -14,20 +14,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
+    public static final String DB_ADD = "DB_Add";
+    public static final String DB_FAIL = "DB_Fail";
     private FirebaseAuth mAuth;
+    public FirebaseFirestore db;
     private Button signUpBtn;
     private EditText etEmail;
     private EditText etPassword;
     private EditText etPasswordRe;
+    private EditText etFirstName;
+    private EditText etLastName;
     private ImageButton btViewPass;
     private ImageButton btViewPassRe;
     boolean showingPass = false;
@@ -41,6 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         signUpBtn = findViewById(R.id.btSignIn);
         btViewPass = findViewById(R.id.btViewPassword);
@@ -49,6 +61,8 @@ public class SignUpActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etPasswordRe = findViewById(R.id.etPasswordRe);
+        etFirstName = findViewById(R.id.etFirstName);
+        etLastName = findViewById(R.id.etLastName);
         TextView tvLoginLink = findViewById(R.id.tvLoginLink);
 
         btViewPass.setOnClickListener(new View.OnClickListener() {
@@ -84,18 +98,40 @@ public class SignUpActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String firstName = etFirstName.getText().toString();
+                final String lastName = etLastName.getText().toString();
                 final String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-                String passwordRe = etPasswordRe.getText().toString();
+                final String password = etPassword.getText().toString();
+                final String passwordRe = etPasswordRe.getText().toString();
+                boolean infoError = false;
 
+
+                if (firstName.isEmpty()){
+                    etFirstName.setError("First Name cannot be empty.");
+                    infoError = true;
+                }
+
+                if(lastName.isEmpty()){
+                    etLastName.setError("Last Name cannot be empty");
+                    infoError = true;
+                }
+
+                if (email.isEmpty()){
+                    etEmail.setError("Email cannot be empty");
+                    infoError = true;
+                }
 
                 if(!password.equals(passwordRe)){
                     etPasswordRe.setError("Passwords do not match");
+                    infoError = true;
                 }
 
                 if(!isValidPassword(password)){
                     etPassword.setError("Password must contain 8 or more characters with a mix of letters, numbers & symbols");
+                    infoError = true;
                 }
+
+                if(infoError){return;}
 
                 if(password.equals(passwordRe) && isValidPassword(password)){
                     Log.d("Accepted Password", password);
@@ -106,6 +142,22 @@ public class SignUpActivity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         Log.d("Sign Up", "createUserWithEmailAndPassword:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
+                                        Map<String,String> userName = new HashMap<>();
+                                        userName.put("firstName" , firstName);
+                                        userName.put("lastName", lastName);
+                                        db.collection("users").document(user.getUid()).set(userName)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(DB_ADD, "User added to database.");
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                    Log.d(DB_FAIL,"User was not added to database.");
+                                                    }
+                                        });
 
                                         user.sendEmailVerification()
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
