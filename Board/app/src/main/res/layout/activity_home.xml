@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_theme"
+    android:background="@drawable/background_gradient"
     tools:context=".HomeActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_marginBottom="80dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,28 +22,34 @@
             android:id="@+id/bt_go_events"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:gravity="left|center_vertical"
-            android:textColor="@color/header_theme"
             android:background="@android:color/transparent"
-            android:text="@string/btn_go_events" />
+            android:fontFamily="@font/roboto"
+            android:gravity="left|center_vertical"
+            android:text="@string/btn_go_events"
+            android:textColor="#67ABE6"
+            android:textSize="30sp" />
 
         <Button
             android:id="@+id/bt_find_events"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:gravity="left|center_vertical"
-            android:textColor="@color/header_theme"
             android:background="@android:color/transparent"
-            android:text="@string/btn_find_events" />
+            android:fontFamily="@font/roboto"
+            android:gravity="left|center_vertical"
+            android:text="@string/btn_find_events"
+            android:textColor="#8F8EE2"
+            android:textSize="30sp" />
 
         <Button
             android:id="@+id/bt_post_events"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:gravity="left|center_vertical"
-            android:textColor="@color/header_theme"
             android:background="@android:color/transparent"
-            android:text="@string/btn_post_events" />
+            android:fontFamily="@font/roboto"
+            android:gravity="left|center_vertical"
+            android:text="@string/btn_post_events"
+            android:textColor="#9F44F1"
+            android:textSize="30dp" />
 
     </LinearLayout>
 
@@ -50,14 +58,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:layout_marginBottom="510dp"
-        android:fontFamily="@font/poetsen"
-        android:text="Hello, User"
-        android:textSize="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:fontFamily="@font/roboto"
+        android:text="Hello, Harry"
+        android:textColor="@android:color/white"
+        android:textSize="60dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ public class SignInActivity extends AppCompatActivity {
     private ImageButton btViewPass;
     Intent loginIntent;
     Intent signupIntent;
+    Intent homePageIntent;
     boolean showingPass = false;
 
 
@@ -41,7 +44,9 @@ public class SignInActivity extends AppCompatActivity {
         btViewPass = findViewById(R.id.btViewPasswordIn);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         TextView t2 = findViewById(R.id.tvLinkSignUp);
+        ImageView logoClickable = findViewById(R.id.logoImage);
 
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if(currentUser!=null){
             //loginIntent = new Intent(this, HomePage.class)
@@ -95,6 +100,14 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 signupIntent = new Intent(v.getContext(), SignUpActivity.class);
                 startActivity(signupIntent);
+            }
+        });
+
+        logoClickable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homePageIntent = new Intent(v.getContext(), HomeActivity.class);
+                startActivity(homePageIntent);
             }
         });
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -42,42 +43,42 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         signUpBtn = findViewById(R.id.btSignIn);
-        btViewPass = findViewById(R.id.btViewPassword);
-        btViewPassRe = findViewById(R.id.btViewPasswordRe);
+//        btViewPass = findViewById(R.id.btViewPassword);
+//        btViewPassRe = findViewById(R.id.btViewPasswordRe);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etPasswordRe = findViewById(R.id.etPasswordRe);
         TextView tvLoginLink = findViewById(R.id.tvLoginLink);
 
-        btViewPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!showingPass) {
-                    etPassword.setInputType(0x00000091);
-                    showingPass = true;
-                }
-                else{
-                    etPassword.setInputType( 0x00000081);
-                    showingPass = false;
-                }
-            }
-        });
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        btViewPassRe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!showingRe){
-                    etPasswordRe.setInputType(0x00000091);
-                    showingRe = true;
-                }
-                else{
-                    etPasswordRe.setInputType(0x00000081);
-                    showingRe = false;
-                }
-
-            }
-        });
+//        btViewPass.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!showingPass) {
+//                    etPassword.setInputType(0x00000091);
+//                    showingPass = true;
+//                } else {
+//                    etPassword.setInputType(0x00000081);
+//                    showingPass = false;
+//                }
+//            }
+//        });
+//
+//        btViewPassRe.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!showingRe) {
+//                    etPasswordRe.setInputType(0x00000091);
+//                    showingRe = true;
+//                } else {
+//                    etPasswordRe.setInputType(0x00000081);
+//                    showingRe = false;
+//                }
+//
+//            }
+//        });
 
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
@@ -88,21 +89,21 @@ public class SignUpActivity extends AppCompatActivity {
                 String passwordRe = etPasswordRe.getText().toString();
 
 
-                if(!password.equals(passwordRe)){
+                if (!password.equals(passwordRe)) {
                     etPasswordRe.setError("Passwords do not match");
                 }
 
-                if(!isValidPassword(password)){
+                if (!isValidPassword(password)) {
                     etPassword.setError("Password must contain 8 or more characters with a mix of letters, numbers & symbols");
                 }
 
-                if(password.equals(passwordRe) && isValidPassword(password)){
+                if (password.equals(passwordRe) && isValidPassword(password)) {
                     Log.d("Accepted Password", password);
-                    mAuth.createUserWithEmailAndPassword(email,password)
+                    mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         Log.d("Sign Up", "createUserWithEmailAndPassword:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
 
@@ -110,14 +111,13 @@ public class SignUpActivity extends AppCompatActivity {
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-                                                        if(task.isSuccessful()){
-                                                            Toast.makeText(SignUpActivity.this,"Email sent to: " + email, Toast.LENGTH_LONG).show();
-                                                            Log.d("Sign Up","Email sent.");
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(SignUpActivity.this, "Email sent to: " + email, Toast.LENGTH_LONG).show();
+                                                            Log.d("Sign Up", "Email sent.");
                                                         }
                                                     }
                                                 });
-                                    }
-                                    else{
+                                    } else {
                                         Log.w("Sign Up", "createUserWithEmail:failure", task.getException());
                                     }
                                 }

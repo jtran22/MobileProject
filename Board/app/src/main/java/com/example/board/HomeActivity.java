@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,6 +19,7 @@ public class HomeActivity extends AppCompatActivity {
     private Intent listEvents;
     private Intent postEvents;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +28,9 @@ public class HomeActivity extends AppCompatActivity {
         btGoEvents = findViewById(R.id.bt_go_events);
         btFindEvents = findViewById(R.id.bt_find_events);
         btPostEvents = findViewById(R.id.bt_post_events);
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 
         btGoEvents.setOnClickListener(new View.OnClickListener() {
             @Override
