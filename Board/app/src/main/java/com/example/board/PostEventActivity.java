@@ -14,25 +14,35 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 
 public class PostEventActivity extends AppCompatActivity {
     private Button btChoosePhoto;
     private Button btUploadPhoto;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private DocumentReference docRef = db.collection("users").document(user.getUid()).collection("posts").document();
+    private FirebaseFirestore db;
+    private FirebaseUser user;
+    private StorageReference mStorageRef;
+    //private DocumentReference docRef = db.collection("users").document(user.getUid()).collection("posts").document();
     private ImageView ivUserPhoto;
     private static final int CAMERA_PERMISSION_CODE = 100;
     private static final int STORAGE_PERMISSION_CODE = 101;
@@ -45,11 +55,25 @@ public class PostEventActivity extends AppCompatActivity {
         btUploadPhoto = findViewById(R.id.btUploadPhoto);
         ivUserPhoto = findViewById(R.id.ivUserPhoto);
 
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        final StorageReference userRef = mStorageRef.child("images/" + user.getUid().toString() + "/profilepicture.jpg");
+
+        db = FirebaseFirestore.getInstance();
+
         btChoosePhoto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
                 selectImage(PostEventActivity.this);
+            }
+        });
+
+        btUploadPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadPhoto(userRef);
             }
         });
 
@@ -163,7 +187,27 @@ public class PostEventActivity extends AppCompatActivity {
     }
 
 
-    private void uploadPhoto(){
+    private void uploadPhoto(StorageReference reference){
+        // Get the data from an ImageView as bytes
+        Bitmap bitmap = ((BitmapDrawable) ivUserPhoto.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
 
+        UploadTask uploadTask = reference.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d("Fail_Post", "Could not upload to storage: " + exception.getMessage());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                Log.d("Success_Post","Upload Successful : " + taskSnapshot.getMetadata());
+                Toast.makeText(PostEventActivity.this, "Upload Successful", Toast.LENGTH_LONG);
+            }
+        });
     }
 }

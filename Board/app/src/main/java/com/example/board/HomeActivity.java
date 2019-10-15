@@ -18,20 +18,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
-    private TextView testText;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private DocumentReference docRef = db.collection("users").document(user.getUid());
+    private Button btUpload;
+    private Button btProfile;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Button btUpload = findViewById(R.id.btPost);
-
-        testText = findViewById(R.id.tvTest);
-        fetchUser();
+        btUpload = findViewById(R.id.btPost);
+        btProfile = findViewById(R.id.btProfile);
 
         btUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,17 +38,15 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-    }
-    public void fetchUser(){
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        btProfile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    Map<String,Object> nameData = documentSnapshot.getData();
-                    testText.setText(nameData.get("firstName").toString() + " " + nameData.get("lastName").toString());
-                }
+            public void onClick(View v) {
+                Intent changeActivities = new Intent(v.getContext(), ProfileActivity.class);
+                startActivity(changeActivities);
             }
         });
+
     }
+
 
 }

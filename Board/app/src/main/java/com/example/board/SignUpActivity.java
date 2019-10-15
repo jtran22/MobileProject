@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -61,8 +60,8 @@ public class SignUpActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etPasswordRe = findViewById(R.id.etPasswordRe);
-        etFirstName = findViewById(R.id.etFirstName);
-        etLastName = findViewById(R.id.etLastName);
+        etFirstName = findViewById(R.id.etSignFirstName);
+        etLastName = findViewById(R.id.etSignLastName);
         TextView tvLoginLink = findViewById(R.id.tvLoginLink);
 
         btViewPass.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +141,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         Log.d("Sign Up", "createUserWithEmailAndPassword:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
+
                                         Map<String,String> userName = new HashMap<>();
                                         userName.put("firstName" , firstName);
                                         userName.put("lastName", lastName);
