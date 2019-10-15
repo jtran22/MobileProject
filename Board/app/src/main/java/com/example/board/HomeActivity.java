@@ -5,48 +5,55 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Map;
+import android.widget.EditText;
 
 public class HomeActivity extends AppCompatActivity {
-    private Button btUpload;
-    private Button btProfile;
 
+    private Button btGoEvents;
+    private Button btFindEvents;
+    private Button btPostEvents;
+
+    private Intent myEvents;
+    private Intent listEvents;
+    private Intent postEvents;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        btUpload = findViewById(R.id.btPost);
-        btProfile = findViewById(R.id.btProfile);
 
-        btUpload.setOnClickListener(new View.OnClickListener() {
+        btGoEvents = findViewById(R.id.bt_go_events);
+        btFindEvents = findViewById(R.id.bt_find_events);
+        btPostEvents = findViewById(R.id.bt_post_events);
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
+        btGoEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent changeActivities = new Intent(v.getContext(), PostEventActivity.class);
-                startActivity(changeActivities);
+                myEvents = new Intent(HomeActivity.this, MyEventsActivity.class);
+                startActivity(myEvents);
             }
         });
 
-        btProfile.setOnClickListener(new View.OnClickListener() {
+        btFindEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent changeActivities = new Intent(v.getContext(), ProfileActivity.class);
-                startActivity(changeActivities);
+                listEvents = new Intent(HomeActivity.this, ListEventsActivity.class);
+                startActivity(listEvents);
             }
         });
 
+        btPostEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postEvents = new Intent(HomeActivity.this, EditActivity.class);
+                startActivity(postEvents);
+            }
+        });
     }
-
-
 }

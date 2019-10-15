@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -42,7 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageButton btViewPassRe;
     boolean showingPass = false;
     boolean showingRe = false;
-    Intent signIn;
+    //Intent signIn;
 
 
     @Override
@@ -63,6 +64,8 @@ public class SignUpActivity extends AppCompatActivity {
         etFirstName = findViewById(R.id.etSignFirstName);
         etLastName = findViewById(R.id.etSignLastName);
         TextView tvLoginLink = findViewById(R.id.tvLoginLink);
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         btViewPass.setOnClickListener(new View.OnClickListener() {
             @Override

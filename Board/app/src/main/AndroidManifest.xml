@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.example.board">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.board">
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -15,6 +17,8 @@ package="com.example.board">
         android:theme="@style/AppTheme">
         <activity android:name=".PostEventActivity"></activity>
         <activity android:name=".HomeActivity" />
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ListEventsActivity" />
         <activity android:name=".SwipeEventActivity" />
         <activity android:name=".IndividualEventPage" />
@@ -23,13 +27,11 @@ package="com.example.board">
         <activity android:name=".EditActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".SignInActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".SignInActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
     </application>
-
 </manifest>
