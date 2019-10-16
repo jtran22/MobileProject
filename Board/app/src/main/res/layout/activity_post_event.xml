@@ -4,38 +4,125 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     tools:context=".PostEventActivity">
 
     <Button
-        android:id="@+id/btChoosePhoto"
+        android:id="@+id/btPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        android:text="Choose Photo"
-        app:layout_constraintBottom_toTopOf="@+id/btUploadPhoto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivUserPhoto" />
-
-    <Button
-        android:id="@+id/btUploadPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="193dp"
-        android:text="Upload"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/btn_rounded"
+        android:text="Post"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/btChoosePhoto"
-        app:layout_constraintTop_toBottomOf="@+id/btChoosePhoto" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/ivUserPhoto"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/btChoosePhoto"
+    <TextView
+        android:id="@+id/tvPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:text="@string/btn_post_events"
+        android:textColor="#FFFFFF"
+        android:textSize="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic[16]" />
+        tools:layout_editor_absoluteY="40dp" />
+
+    <ImageButton
+        android:id="@+id/ibtPic"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="118dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <EditText
+        android:id="@+id/etEventName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="44dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="Event Name"
+        android:inputType="text"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ibtPic" />
+
+    <EditText
+        android:id="@+id/etEventAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="44dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="Address"
+        android:inputType="textPostalAddress"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEventName" />
+
+    <EditText
+        android:id="@+id/etEventDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="44dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="Date"
+        android:inputType="date"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEventAddress" />
+
+    <EditText
+        android:id="@+id/etAbout"
+        android:layout_width="325dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="44dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="About"
+        android:inputType="text"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEventTime" />
+
+    <EditText
+        android:id="@+id/etEventTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="44dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="Time"
+        android:inputType="time"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEventDate" />
 </androidx.constraintlayout.widget.ConstraintLayout>
