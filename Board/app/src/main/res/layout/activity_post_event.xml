@@ -6,36 +6,103 @@
     android:layout_height="match_parent"
     tools:context=".PostEventActivity">
 
-    <Button
-        android:id="@+id/btChoosePhoto"
+    <EditText
+        android:id="@+id/etPostEventTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        android:text="Choose Photo"
-        app:layout_constraintBottom_toTopOf="@+id/btUploadPhoto"
+        android:layout_marginBottom="100dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:inputType="textPersonName"
+        android:text="@string/etEventTime"
+        android:focusable="false"
+        app:layout_constraintBottom_toTopOf="@+id/etPostEventDetails"
+        app:layout_constraintStart_toStartOf="@+id/etPostEventDate"
+        app:layout_constraintTop_toBottomOf="@+id/etPostEventDate" />
+
+    <EditText
+        android:id="@+id/etPostEventDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="17dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:inputType="textPersonName"
+        android:text="@string/etEventDate"
+        android:focusable="false"
+        app:layout_constraintBottom_toTopOf="@+id/etPostEventTime"
+        app:layout_constraintEnd_toEndOf="@+id/etPostEventName"
+        app:layout_constraintTop_toBottomOf="@+id/etPostEventName" />
+
+    <EditText
+        android:id="@+id/etPostEventDetails"
+        android:layout_width="210dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:inputType="textPersonName"
+        android:text="@string/etEventInfo"
+        app:layout_constraintBottom_toTopOf="@+id/ivUserPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivUserPhoto" />
+        app:layout_constraintTop_toBottomOf="@+id/etPostEventTime" />
+
+    <Button
+        android:id="@+id/btChoosePhoto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="27dp"
+        android:text="Choose Photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btUploadPhoto"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btUploadPhoto"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="193dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="27dp"
         android:text="Upload"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/btChoosePhoto"
-        app:layout_constraintTop_toBottomOf="@+id/btChoosePhoto" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btChoosePhoto"
+        app:layout_constraintTop_toBottomOf="@+id/ivUserPhoto" />
 
     <ImageView
         android:id="@+id/ivUserPhoto"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/btChoosePhoto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/btUploadPhoto"
+        app:layout_constraintEnd_toEndOf="@+id/etPostEventDetails"
+        app:layout_constraintStart_toStartOf="@+id/etPostEventDetails"
+        app:layout_constraintTop_toBottomOf="@+id/etPostEventDetails"
         tools:srcCompat="@tools:sample/backgrounds/scenic[16]" />
+
+    <EditText
+        android:id="@+id/etPostEventName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:layout_marginBottom="18dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:inputType="textPersonName"
+        android:text="@string/etEventName"
+        app:layout_constraintBottom_toTopOf="@+id/etPostEventDate"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50121653" />
 </androidx.constraintlayout.widget.ConstraintLayout>

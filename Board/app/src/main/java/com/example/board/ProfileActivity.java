@@ -50,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String name;
     private String email;
     private String uid;
+    private Boolean imageSelected = false;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -84,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 selectImage(ProfileActivity.this);
+                imageSelected = true;
             }
         });
 
@@ -92,7 +94,15 @@ public class ProfileActivity extends AppCompatActivity {
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadPhoto();
+                if(imageSelected) {
+                    uploadPhoto();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Please Choose a Photo",Toast.LENGTH_LONG);
+                }
+                //TODO: CH
+                //if(ibProfilePic.getDrawable() != null)
+
             }
         });
 
