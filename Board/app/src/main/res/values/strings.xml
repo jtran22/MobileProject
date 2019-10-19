@@ -7,4 +7,11 @@
     <string name="btn_find_events">Find things to do</string>
     <string name="btn_post_events">Post an event</string>
 
+    <string-array name="distances">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+    </string-array>
 </resources>
