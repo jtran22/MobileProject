@@ -75,6 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double lngSelected;
     private String selectedAddress;
     private String placeId;
+    private String apiKey = BuildConfig.ApiKey;
 
     private List<AutocompletePrediction> predictionList;
 
@@ -97,7 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnConfirm = findViewById(R.id.btnConfirm);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapsActivity.this);
-        Places.initialize(MapsActivity.this,"AIzaSyAkiBKYH6YwXmy2kEuWIdTquWyXlG554CY");
+        Places.initialize(MapsActivity.this,apiKey);
         mPlaceDetetionClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
