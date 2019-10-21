@@ -45,7 +45,8 @@ public class ListEventsActivity extends AppCompatActivity {
     //3.6 = 5 mile radius, distance * 0.72
     private GeoLocation myLocation;
     private GeoLocation[] boundingCoords;
-    private final double radius = 3958.8;
+    private double distanceTo;
+    private final double RADIUS = 3958.8;
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
@@ -53,6 +54,7 @@ public class ListEventsActivity extends AppCompatActivity {
     final private int LOCATION_PERMISSION_REQUEST_CODE = 103;
 
     private static final String TAG = "ListEvents";
+    private ArrayList<String> mDistances = new ArrayList<>();
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList <String> mImagesURL = new ArrayList<>();
     private ArrayList<String> mDetails = new ArrayList<>();
@@ -105,6 +107,7 @@ public class ListEventsActivity extends AppCompatActivity {
                 mDetails.clear();
                 mImagesURL.clear();
                 eventsQuery.clear();
+                mDistances.clear();
                 distance = Double.parseDouble(tvDistance.getText().toString()) * 0.72;
                 getBoundingCoord();
             }
@@ -125,6 +128,10 @@ public class ListEventsActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document: task.getResult()){
                         double eventLat = Double.parseDouble(document.getData().get("eventLat").toString());
+                        double eventLng = Double.parseDouble(document.getData().get("eventLng").toString());
+                        GeoLocation eventLocation = GeoLocation.fromDegrees(eventLat,eventLng);
+                        distanceTo = myLocation.distanceTo(eventLocation,RADIUS);
+                        Log.i("eventQuery",document.getData().get("eventName").toString() + " Distance:" + distanceTo);
                         if(eventLat > boundingCoords[0].getLatitudeInDegrees() &&
                         eventLat < boundingCoords[1].getLatitudeInDegrees()){
                             Log.i("eventQuery", document.getId() + "=>" + document.getData());
@@ -144,6 +151,10 @@ public class ListEventsActivity extends AppCompatActivity {
     {
         for(int i = 0; i < eventsQuery.size(); i++){
             QueryDocumentSnapshot doc = eventsQuery.get(i);
+            double eventLat = Double.parseDouble(doc.getData().get("eventLat").toString());
+            double eventLng = Double.parseDouble(doc.getData().get("eventLng").toString());
+            GeoLocation eventLocation = GeoLocation.fromDegrees(eventLat,eventLng);
+            mDistances.add(String.format("%.2f",myLocation.distanceTo(eventLocation,RADIUS)));
             mNames.add(doc.get("eventName").toString());
             mDetails.add(doc.get("eventDetails").toString());
             mImagesURL.add(doc.get("imageRef").toString());
@@ -156,7 +167,7 @@ public class ListEventsActivity extends AppCompatActivity {
         Log.d(TAG,"initRecyclerView: inti recycler");
         RecyclerView recyclerView = findViewById(R.id.recycler);
         recyclerView.removeAllViewsInLayout();
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mNames,mImagesURL,mDetails);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mNames,mImagesURL,mDetails,mDistances);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -164,7 +175,7 @@ public class ListEventsActivity extends AppCompatActivity {
 
 
     private void getBoundingCoord(){
-        boundingCoords = myLocation.boundingCoordinates(distance,radius);
+        boundingCoords = myLocation.boundingCoordinates(distance,RADIUS);
         String bCoord1 = Double.toString(boundingCoords[0].getLatitudeInDegrees());
         String bCoord2 = Double.toString(boundingCoords[0].getLongitudeInDegrees());
         String bCoord3 = Double.toString(boundingCoords[1].getLatitudeInDegrees());

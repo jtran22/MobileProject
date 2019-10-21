@@ -31,13 +31,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList <String> mImageNames = new ArrayList<>();
     private ArrayList <String> mImages = new ArrayList<>();
     private ArrayList <String> mDescription = new ArrayList<>();
+    private ArrayList <String> mDistance = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(Context mContext,ArrayList<String> mImageNames, ArrayList<String> mImages, ArrayList<String> mDescription) {
+    public RecyclerViewAdapter(Context mContext,ArrayList<String> mImageNames, ArrayList<String> mImages, ArrayList<String> mDescription, ArrayList<String> mDistance) {
         this.mImageNames = mImageNames;
         this.mImages = mImages;
         this.mContext = mContext;
         this.mDescription = mDescription;
+        this.mDistance = mDistance;
     }
 
     @NonNull
@@ -58,6 +60,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .into(holder.image);
         holder.imageName.setText(mImageNames.get(position));
         holder.description.setText(mDescription.get(position));
+        holder.distance.setText(mDistance.get(position) + "mi");
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +81,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         CircleImageView image;
         TextView imageName;
         TextView description;
+        TextView distance;
         RelativeLayout parentLayout;
 
 
@@ -86,6 +90,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             image = itemView.findViewById(R.id.image);
             imageName = itemView.findViewById(R.id.image_name);
             description = itemView.findViewById(R.id.description);
+            distance = itemView.findViewById(R.id.eventDistance);
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
         }

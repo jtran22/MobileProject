@@ -56,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//Todo: Fix search
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -178,6 +179,64 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void afterTextChanged(Editable s) {
+
+            }
+        });
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                if (predictionList != null) {
+                    AutocompletePrediction selectedPrediction = predictionList.get(0);
+                    final String suggestion = materialSearchBar.getLastSuggestions().get(0).toString();
+                    selectedAddress = suggestion;
+                    materialSearchBar.setText(suggestion);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            materialSearchBar.clearSuggestions();
+                        }
+                    }, 500);
+                    materialSearchBar.clearSuggestions();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(materialSearchBar.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    }
+                    placeId = selectedPrediction.getPlaceId();
+                    List<Place.Field> placeFields = Arrays.asList(Place.Field.LAT_LNG);
+
+                    FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(placeId, placeFields).build();
+                    mPlaceDetetionClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                        @Override
+                        public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                            selectedPlace = fetchPlaceResponse.getPlace();
+                            LatLng latLngSelected = selectedPlace.getLatLng();
+                            latSelected = latLngSelected.latitude;
+                            lngSelected = latLngSelected.longitude;
+                            if (latLngSelected != null) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngSelected, DEFAULT_ZOOM));
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if (e instanceof ApiException) {
+                                ApiException apiException = (ApiException) e;
+                                apiException.printStackTrace();
+                                Log.i("MapErr", e.getMessage());
+                            }
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
 
             }
         });

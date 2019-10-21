@@ -60,7 +60,6 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
     private StorageReference mStorageRef;
     private DocumentReference eventDocRef;
     private StorageReference eventImageRef;
-    private String docRefId;
     private ImageView ivUserPhoto;
     private boolean imageSelected;
 
@@ -172,8 +171,8 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
                                 eventDocRef.update("imageRef","gs://boardapphht.appspot.com/images/party-hat.png");
                                 Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
                                 //Todo: myevents
-                                Intent home = new Intent(PostEventActivity.this,ListEventsActivity.class);
-                                startActivity(home);
+                                Intent myEvents = new Intent(PostEventActivity.this,MyEventsActivity.class);
+                                startActivity(myEvents);
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {

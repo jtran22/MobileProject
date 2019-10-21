@@ -3,6 +3,7 @@ package com.example.board;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -130,7 +131,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 if(!isValidPassword(password)){
-                    etPassword.setError("Password must contain 8 or more characters with a mix of letters, numbers & symbols");
+                    etPassword.setError("Password must contain 8 or more characters with a mix of one uppercase, one lowercase, numbers & symbols");
                     infoError = true;
                 }
 
@@ -183,6 +184,8 @@ public class SignUpActivity extends AppCompatActivity {
                                                             Toast.makeText(SignUpActivity.this,"Email sent to: " + email, Toast.LENGTH_LONG).show();
                                                             Log.d("Sign Up","Email sent.");
                                                         }
+                                                        Intent login = new Intent(SignUpActivity.this, SignInActivity.class);
+                                                        startActivity(login);
                                                     }
                                                 });
                                     }
