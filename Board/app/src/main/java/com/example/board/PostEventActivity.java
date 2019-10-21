@@ -143,6 +143,7 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
+        //Todo: set timestamp for event removal from database
         btPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,6 +157,7 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
                     event.put("eventLat",eventLat);
                     event.put("eventLng",eventLng);
                     event.put("placeId",placeId);
+                    event.put("timestamp",System.currentTimeMillis());
 
                     Log.i("event",event.toString());
 
@@ -165,6 +167,13 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
                             eventImageRef = mStorageRef.child("images/" + user.getUid() + "/events/" + eventDocRef.getId() + ".jpg");
                             if(imageSelected == true) {
                                 uploadPhoto(eventImageRef);
+                            }
+                            else{
+                                eventDocRef.update("imageRef","gs://boardapphht.appspot.com/images/party-hat.png");
+                                Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
+                                //Todo: myevents
+                                Intent home = new Intent(PostEventActivity.this,ListEventsActivity.class);
+                                startActivity(home);
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -373,6 +382,9 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
                 Log.i("Success_Post","Upload Successful : " + taskSnapshot.getMetadata());
                 Toast.makeText(PostEventActivity.this, "Upload Successful", Toast.LENGTH_LONG);
                 eventDocRef.update("imageRef",eventImageRef.toString());
+                Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
+                Intent home = new Intent(PostEventActivity.this,ListEventsActivity.class);
+                startActivity(home);
             }
         });
     }

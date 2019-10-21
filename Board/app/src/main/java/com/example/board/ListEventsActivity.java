@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,7 +21,14 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,6 +55,12 @@ public class ListEventsActivity extends AppCompatActivity {
     private static final String TAG = "ListEvents";
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList <String> mImagesURL = new ArrayList<>();
+    private ArrayList<String> mDetails = new ArrayList<>();
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ArrayList<QueryDocumentSnapshot> eventsQuery;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +76,9 @@ public class ListEventsActivity extends AppCompatActivity {
         getLocationPermission();
         distance = 7.2;
 
-        initImageBitmaps();
         Spinner spinner = findViewById(R.id.spinner);
+
+        eventsQuery = new ArrayList<>();
 
 
         sbDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -86,38 +101,53 @@ public class ListEventsActivity extends AppCompatActivity {
         btnUpdateDist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mNames.clear();
+                mDetails.clear();
+                mImagesURL.clear();
+                eventsQuery.clear();
                 distance = Double.parseDouble(tvDistance.getText().toString()) * 0.72;
                 getBoundingCoord();
+            }
+        });
+
+
+    }
+
+    private void getEvents(){
+        //Todo: fix constraints
+        db.collectionGroup("events")
+                .whereGreaterThanOrEqualTo("eventLng",boundingCoords[0].getLongitudeInDegrees())
+                .whereLessThanOrEqualTo("eventLng",boundingCoords[1].getLongitudeInDegrees())
+                .get()
+        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot document: task.getResult()){
+                        double eventLat = Double.parseDouble(document.getData().get("eventLat").toString());
+                        if(eventLat > boundingCoords[0].getLatitudeInDegrees() &&
+                        eventLat < boundingCoords[1].getLatitudeInDegrees()){
+                            Log.i("eventQuery", document.getId() + "=>" + document.getData());
+                            eventsQuery.add(document);
+                        }
+                    }
+                    initImageBitmaps();
+
+                } else {
+                    Log.i("eventQuery", "Error getting documents: " + task.getException());
+                }
             }
         });
     }
 
     private void initImageBitmaps()
     {
-        Log.d(TAG,"initImagesBitmaps: preparing Bitaps");
-        mImagesURL.add("https://c1.staticflickr.com/5/4636/25316407448_de5fbf183d_o.jpg");
-        mNames.add("Havasu Falls");
-
-        mImagesURL.add("https://i.redd.it/tpsnoz5bzo501.jpg");
-        mNames.add("Trondheim");
-
-        mImagesURL.add("https://i.redd.it/qn7f9oqu7o501.jpg");
-        mNames.add("Portugal");
-
-        mImagesURL.add("https://i.redd.it/j6myfqglup501.jpg");
-        mNames.add("Rocky Mountain National Park");
-
-
-        mImagesURL.add("https://i.redd.it/0h2gm1ix6p501.jpg");
-        mNames.add("Mahahual");
-
-        mImagesURL.add("https://i.redd.it/k98uzl68eh501.jpg");
-        mNames.add("Frozen Lake");
-
-
-        mImagesURL.add("https://i.redd.it/glin0nwndo501.jpg");
-        mNames.add("White Sands Desert");
-
+        for(int i = 0; i < eventsQuery.size(); i++){
+            QueryDocumentSnapshot doc = eventsQuery.get(i);
+            mNames.add(doc.get("eventName").toString());
+            mDetails.add(doc.get("eventDetails").toString());
+            mImagesURL.add(doc.get("imageRef").toString());
+        }
         initRecyclerView();
     }
 
@@ -125,7 +155,8 @@ public class ListEventsActivity extends AppCompatActivity {
     {
         Log.d(TAG,"initRecyclerView: inti recycler");
         RecyclerView recyclerView = findViewById(R.id.recycler);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mNames,mImagesURL);
+        recyclerView.removeAllViewsInLayout();
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mNames,mImagesURL,mDetails);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -140,6 +171,8 @@ public class ListEventsActivity extends AppCompatActivity {
         String bCoord4 = Double.toString(boundingCoords[1].getLongitudeInDegrees());
 
         Log.i("Bounding Cordinates",bCoord1 + " " + bCoord2 + " " + bCoord3 + " " + bCoord4);
+
+        getEvents();
 
     }
 
@@ -186,5 +219,12 @@ public class ListEventsActivity extends AppCompatActivity {
                 Log.d("locationErr", e.toString());
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent home = new Intent(ListEventsActivity.this,HomeActivity.class);
+        startActivity(home);
     }
 }

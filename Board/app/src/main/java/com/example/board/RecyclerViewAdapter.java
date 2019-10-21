@@ -12,12 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+
+
 
     private static final String TAG = "RecyclerViewAdapter";
     private ArrayList <String> mImageNames = new ArrayList<>();
@@ -25,10 +33,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList <String> mDescription = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(Context mContext,ArrayList<String> mImageNames, ArrayList<String> mImages) {
+    public RecyclerViewAdapter(Context mContext,ArrayList<String> mImageNames, ArrayList<String> mImages, ArrayList<String> mDescription) {
         this.mImageNames = mImageNames;
         this.mImages = mImages;
         this.mContext = mContext;
+        this.mDescription = mDescription;
     }
 
     @NonNull
@@ -41,13 +50,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        StorageReference imageRef = storage.getReferenceFromUrl(mImages.get(position));
         Log.d(TAG,"onBindViewHolder: Called.");
         Glide.with(mContext)
                 .asBitmap()
-                .load(mImages.get(position))
+                .load(imageRef)
                 .into(holder.image);
         holder.imageName.setText(mImageNames.get(position));
-
+        holder.description.setText(mDescription.get(position));
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,6 +66,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
     }
+
 
     @Override
     public int getItemCount() {
@@ -66,6 +77,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     {
         CircleImageView image;
         TextView imageName;
+        TextView description;
         RelativeLayout parentLayout;
 
 
@@ -73,6 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
             image = itemView.findViewById(R.id.image);
             imageName = itemView.findViewById(R.id.image_name);
+            description = itemView.findViewById(R.id.description);
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
         }
