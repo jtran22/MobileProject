@@ -1,6 +1,7 @@
 package com.example.board;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -32,14 +35,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList <String> mImages = new ArrayList<>();
     private ArrayList <String> mDescription = new ArrayList<>();
     private ArrayList <String> mDistance = new ArrayList<>();
+    private ArrayList <QueryDocumentSnapshot> eventsQuery;
     private Context mContext;
 
-    public RecyclerViewAdapter(Context mContext,ArrayList<String> mImageNames, ArrayList<String> mImages, ArrayList<String> mDescription, ArrayList<String> mDistance) {
+    public RecyclerViewAdapter(Context mContext,ArrayList<String> mImageNames, ArrayList<String> mImages,
+                               ArrayList<String> mDescription, ArrayList<String> mDistance, ArrayList<QueryDocumentSnapshot> eventsQuery) {
         this.mImageNames = mImageNames;
         this.mImages = mImages;
         this.mContext = mContext;
         this.mDescription = mDescription;
         this.mDistance = mDistance;
+        this.eventsQuery = eventsQuery;
     }
 
     @NonNull
@@ -65,6 +71,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View view) {
                 Log.d(TAG,"onClick: clicked on: " + mImageNames.get(position));
+                Log.d("eventsQuery", eventsQuery.get(position).getData().get("eventName").toString() +" " + eventsQuery.get(position).getId());
+                Intent eventDetails = new Intent(mContext,IndividualEventPage.class);
+                eventDetails.putExtra("eventId",eventsQuery.get(position).getId());
+                eventDetails.putExtra("eventAddress",eventsQuery.get(position).getData().get("eventAddress").toString());
+                eventDetails.putExtra("eventDate",eventsQuery.get(position).getData().get("eventDate").toString());
+                eventDetails.putExtra("eventName",eventsQuery.get(position).getData().get("eventName").toString());
+                eventDetails.putExtra("eventTime",eventsQuery.get(position).getData().get("eventTime").toString());
+                eventDetails.putExtra("imageRef",eventsQuery.get(position).getData().get("imageRef").toString());
+                eventDetails.putExtra("eventDetails",eventsQuery.get(position).getData().get("eventDetails").toString());
+                eventDetails.putExtra("eventDistance",mDistance.get(position) + "mi");
+                mContext.startActivity(eventDetails);
 
             }
         });
