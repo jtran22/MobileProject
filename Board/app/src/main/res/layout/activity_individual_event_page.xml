@@ -87,4 +87,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/transparent" />
 
+    <Button
+        android:id="@+id/btDeletePost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="28dp"
+        android:background="@android:drawable/btn_default"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:fontFamily="@font/roboto"
+        android:text="Delete Post"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btEditPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/roboto"
+        android:text="Edit Post"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btDeletePost"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

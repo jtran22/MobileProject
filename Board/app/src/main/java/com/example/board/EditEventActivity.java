@@ -24,16 +24,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCanceledListener;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,9 +48,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PostEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class EditEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private Button btChoosePhoto;
-    private Button btPost;
+    private Button btConfirmEdit;
     private EditText etPostName;
     private EditText etPostDate;
     private EditText etPostTime;
@@ -60,14 +58,12 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
     private EditText etPostDetails;
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private FirebaseStorage storage;
     private StorageReference mStorageRef;
     private DocumentReference eventDocRef;
     private StorageReference eventImageRef;
     private ImageView ivUserPhoto;
-    private ImageView postShadow;
-    private ProgressBar postProgress;
     private boolean imageSelected;
-    private boolean uploading = false;
 
     private static final int CAMERA_PERMISSION_CODE = 100;
     private static final int STORAGE_PERMISSION_CODE = 101;
@@ -81,35 +77,66 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
     private String eventDetails;
     private String eventDate;
     private String eventTime;
+    private String eventImgRef;
+    private String eventId;
+    private String eventUserId;
+    private Intent intent;
 
-
-    @Override
-    public void onBackPressed() {
-        if(!uploading) {
-            super.onBackPressed();
-        }
-        else
-            Toast.makeText(getApplicationContext(),"Post is Uploading",Toast.LENGTH_LONG).show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_event);
+        setContentView(R.layout.activity_edit_event);
+        intent = getIntent();
         btChoosePhoto = findViewById(R.id.btEditChoosePhoto);
-        btPost = findViewById(R.id.btPost);
+        btConfirmEdit = findViewById(R.id.btConfirmEdit);
         ivUserPhoto = findViewById(R.id.ivEditUserPhoto);
-        etPostName = findViewById(R.id.etPostEventName);
-        etPostDate = findViewById(R.id.etPostEventDate);
-        etPostTime = findViewById(R.id.etPostEventTime);
-        etPostAddress = findViewById(R.id.etPostEventAddress);
-        etPostDetails = findViewById(R.id.etPostEventDetails);
-        postShadow = findViewById(R.id.ivPostShadow);
-        postProgress = findViewById(R.id.postProgressBar);
+        etPostName = findViewById(R.id.etEditEventName);
+        etPostDate = findViewById(R.id.etEditEventDate);
+        etPostTime = findViewById(R.id.etEditEventTime);
+        etPostAddress = findViewById(R.id.etEditEventAddress);
+        etPostDetails = findViewById(R.id.etEditEventDetails);
 
+        eventName = intent.getStringExtra("eventName");
+        eventAddress = intent.getStringExtra("eventAddress");
+        eventDate = intent.getStringExtra("eventDate");
+        eventTime = intent.getStringExtra("eventTime");
+        eventDetails = intent.getStringExtra("eventDetails");
+        eventImgRef = intent.getStringExtra("imageRef");
+        eventId = intent.getStringExtra("eventId");
+        eventUserId  = intent.getStringExtra("eventUserId");
+
+
+        etPostName.setText(eventName);
+        etPostAddress.setText(eventAddress);
+        etPostDate.setText(eventDate);
+        etPostTime.setText(eventTime);
+        etPostDetails.setText(eventDetails);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.i("user",user.getUid());
+
+        //Get user storage reference
+        storage = FirebaseStorage.getInstance();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+
+
+        //Get user database reference
+        db = FirebaseFirestore.getInstance();
+        eventDocRef = db.collection("users").document(user.getUid()).collection("events").document();
+
+        final StorageReference imageRef = storage.getReferenceFromUrl(eventImgRef);
+        Glide.with(this)
+                .asBitmap()
+                .load(imageRef)
+                .into(ivUserPhoto);
+
+        /*
         if(savedInstanceState != null){
             etPostName.setText(savedInstanceState.getString("eventName"));
         }
+
+         */
 
         etPostAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,33 +169,21 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
         });
 
         //Get User
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        Log.i("user",user.getUid());
 
-        //Get user storage reference
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-
-        //Get user database reference
-        db = FirebaseFirestore.getInstance();
-        eventDocRef = db.collection("users").document(user.getUid()).collection("events").document();
 
         btChoosePhoto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                selectImage(PostEventActivity.this);
+                selectImage(EditEventActivity.this);
             }
         });
 
         //Todo: set timestamp for event removal from database
-        btPost.setOnClickListener(new View.OnClickListener() {
+        btConfirmEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isFilled() && user != null) {
-                    uploading = true;
-                    postProgress.setVisibility(View.VISIBLE);
-                    postShadow.setVisibility(View.VISIBLE);
-                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    /*
                     Map<String, Object> event = new HashMap<String, Object>();
                     event.put("userId",user.getUid());
                     event.put("userName",user.getDisplayName());
@@ -189,13 +204,13 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
                         public void onSuccess(Void aVoid) {
                             eventImageRef = mStorageRef.child("images/" + user.getUid() + "/events/" + eventDocRef.getId() + ".jpg");
                             if(imageSelected == true) {
-                                eventDocRef.update("imageRef","gs://boardapphht.appspot.com/images/party-hat.png");
                                 uploadPhoto(eventImageRef);
                             }
                             else{
+                                eventDocRef.update("imageRef","gs://boardapphht.appspot.com/images/party-hat.png");
                                 Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
                                 //Todo: myevents
-                                Intent myEvents = new Intent(PostEventActivity.this, MyEventsActivity.class);
+                                Intent myEvents = new Intent(EditEventActivity.this, MyEventsActivity.class);
                                 startActivity(myEvents);
                             }
                         }
@@ -205,6 +220,8 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
                             Log.i("dbupload","upload Failed ",e);
                         }
                     });
+
+                     */
                 }
 
             }
@@ -220,12 +237,12 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
             etPostName.setError("Event Name cannot be empty");
             infoCheck = false;
         }
-         if(etPostDate.getText().toString().isEmpty()){
-             etPostDate.setError("Please Choose Event Date");
-             infoCheck = false;
-         }
+        if(etPostDate.getText().toString().isEmpty()){
+            etPostDate.setError("Please Choose Event Date");
+            infoCheck = false;
+        }
 
-         if(etPostTime.getText().toString().isEmpty()){
+        if(etPostTime.getText().toString().isEmpty()){
             etPostTime.setError("Please Choose Event Time");
             infoCheck = false;
         }
@@ -343,11 +360,11 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
     // Function to check and request permission.
     public void checkPermission(String permission, int requestCode)
     {
-        if (ContextCompat.checkSelfPermission(PostEventActivity.this, permission)
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), permission)
                 == PackageManager.PERMISSION_DENIED) {
 
             // Requesting the permission
-            ActivityCompat.requestPermissions(PostEventActivity.this,
+            ActivityCompat.requestPermissions(EditEventActivity.this,
                     new String[] { permission },
                     requestCode);
         }
@@ -366,7 +383,7 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(PostEventActivity.this,
+                Toast.makeText(getApplicationContext(),
                         "Camera Permission Granted",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -375,7 +392,7 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
         else if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(PostEventActivity.this,
+                Toast.makeText(getApplicationContext(),
                         "Storage Permission Granted",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -390,26 +407,24 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
+
         UploadTask uploadTask = reference.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Log.i("Fail_Post", "Could not upload to storage: " + exception.getMessage());
-                eventDocRef.delete();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
-                postProgress.setVisibility(View.GONE);
-                postShadow.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 Log.i("Success_Post","Upload Successful : " + taskSnapshot.getMetadata());
-                Toast.makeText(PostEventActivity.this, "Upload Successful", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG);
                 eventDocRef.update("imageRef",eventImageRef.toString());
+                //Todo:Take to event, Delete image from storage
                 Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
-                Intent home = new Intent(PostEventActivity.this,MyEventsActivity.class);
+                Intent home = new Intent(EditEventActivity.this,MyEventsActivity.class);
                 startActivity(home);
             }
         });

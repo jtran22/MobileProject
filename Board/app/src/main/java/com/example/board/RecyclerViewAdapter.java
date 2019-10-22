@@ -73,6 +73,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Log.d(TAG,"onClick: clicked on: " + mImageNames.get(position));
                 Log.d("eventsQuery", eventsQuery.get(position).getData().get("eventName").toString() +" " + eventsQuery.get(position).getId());
                 Intent eventDetails = new Intent(mContext,IndividualEventPage.class);
+                eventDetails.putExtra("eventUserId",eventsQuery.get(position).getData().get("userId").toString());
+                eventDetails.putExtra("eventUserName",eventsQuery.get(position).getData().get("userName").toString());
                 eventDetails.putExtra("eventId",eventsQuery.get(position).getId());
                 eventDetails.putExtra("eventAddress",eventsQuery.get(position).getData().get("eventAddress").toString());
                 eventDetails.putExtra("eventDate",eventsQuery.get(position).getData().get("eventDate").toString());

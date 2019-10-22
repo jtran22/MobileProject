@@ -10,13 +10,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField ('String',"ApiKey" , GOOGLE_MAPS_API_KEY)
+        buildConfigField('String', "ApiKey", GOOGLE_MAPS_API_KEY)
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField ('String',"ApiKey" , GOOGLE_MAPS_API_KEY)
+            buildConfigField('String', "ApiKey", GOOGLE_MAPS_API_KEY)
         }
     }
 }
@@ -42,7 +42,6 @@ dependencies {
     implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'com.firebaseui:firebase-ui-storage:6.0.2'
-
 
 
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
