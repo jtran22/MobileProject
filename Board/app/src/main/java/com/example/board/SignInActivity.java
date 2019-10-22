@@ -28,10 +28,12 @@ public class SignInActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private ImageButton btViewPass;
+    private FirebaseAuth.AuthStateListener mAuthListner;
     Intent loginIntent;
-    Intent signupIntent;
+    Intent signUpIntent;
     Intent homePageIntent;
     boolean showingPass = false;
+
 
 
     @Override
@@ -43,16 +45,30 @@ public class SignInActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btViewPass = findViewById(R.id.btViewPasswordIn);
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         TextView t2 = findViewById(R.id.tvLinkSignUp);
         ImageView logoClickable = findViewById(R.id.logoImage);
 
+
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        if(currentUser!=null){
+        mAuthListner = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null) {
+                    String name = user.getDisplayName();
+                    loginIntent = new Intent(SignInActivity.this, HomeActivity.class);
+                    loginIntent.putExtra("displayName",name);
+                    startActivity(loginIntent);
+                }
+            }
+        };
+
+
+        //if(currentUser!=null){
             //loginIntent = new Intent(this, HomePage.class)
             //startActivity(loginIntent)
-        }
+        //}
 
 
         btSignIn.setOnClickListener(new View.OnClickListener() {
@@ -78,10 +94,7 @@ public class SignInActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(SIGN_IN, "signInWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    loginIntent = new Intent(SignInActivity.this,HomeActivity.class);
-                                    startActivity(loginIntent);
-                                    //updateUI(user);
+
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(SIGN_IN, "signInWithEmail:failure", task.getException());
@@ -93,6 +106,7 @@ public class SignInActivity extends AppCompatActivity {
                         });
             }
         });
+
 
         btViewPass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,8 +124,8 @@ public class SignInActivity extends AppCompatActivity {
 
         t2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                signupIntent = new Intent(v.getContext(), SignUpActivity.class);
-                startActivity(signupIntent);
+                signUpIntent = new Intent(v.getContext(), SignUpActivity.class);
+                startActivity(signUpIntent);
             }
         });
 
@@ -124,4 +138,26 @@ public class SignInActivity extends AppCompatActivity {
         });
 
     }
+
+    protected void onStart(){
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListner);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        if(mAuthListner != null){
+            mAuth.removeAuthStateListener(mAuthListner);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
 }

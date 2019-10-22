@@ -3,6 +3,7 @@ package com.example.board;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -129,7 +131,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 if(!isValidPassword(password)){
-                    etPassword.setError("Password must contain 8 or more characters with a mix of letters, numbers & symbols");
+                    etPassword.setError("Password must contain 8 or more characters with a mix of one uppercase, one lowercase, numbers & symbols");
                     infoError = true;
                 }
 
@@ -144,6 +146,18 @@ public class SignUpActivity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         Log.d("Sign Up", "createUserWithEmailAndPassword:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
+
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                .setDisplayName(firstName + " " + lastName).build();
+
+                                        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    Log.d("Sign Up","User profile created");
+                                                }
+                                            }
+                                        });
 
                                         Map<String,String> userName = new HashMap<>();
                                         userName.put("firstName" , firstName);
@@ -170,6 +184,8 @@ public class SignUpActivity extends AppCompatActivity {
                                                             Toast.makeText(SignUpActivity.this,"Email sent to: " + email, Toast.LENGTH_LONG).show();
                                                             Log.d("Sign Up","Email sent.");
                                                         }
+                                                        Intent login = new Intent(SignUpActivity.this, SignInActivity.class);
+                                                        startActivity(login);
                                                     }
                                                 });
                                     }
