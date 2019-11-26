@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     tools:context=".MyEventsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -42,7 +43,7 @@
         android:layout_marginBottom="37dp"
         android:fontFamily="@font/roboto"
         android:text="MY EVENTS"
-        android:textColor="#000000"
+        android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/recycler"
