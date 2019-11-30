@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".EditProfileActivity"></activity>
+        <activity android:name=".ListRSVPActivity"></activity>
+        <activity android:name=".EditProfileActivity" />
         <activity android:name=".EditEventActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -47,6 +48,7 @@
         <activity android:name=".EditActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SignUpActivity" />
+        <activity android:name=".RSVPEventsActivity" />
         <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

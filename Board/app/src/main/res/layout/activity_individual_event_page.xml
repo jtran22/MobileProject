@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".IndividualEventPage">
 
+    <TextView
+        android:id="@+id/tvEventTime2"
+        android:layout_width="92dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/roboto"
+        android:gravity="center"
+        android:text="@string/tvRSVPs"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btRSVPs"
+        app:layout_constraintStart_toEndOf="@+id/tvEventPoster" />
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="447dp"
@@ -36,8 +50,8 @@
 
     <TextView
         android:id="@+id/tvEventAddress"
-        android:layout_width="319dp"
-        android:layout_height="47dp"
+        android:layout_width="325dp"
+        android:layout_height="43dp"
         android:layout_marginStart="42dp"
         android:layout_marginEnd="42dp"
         android:layout_marginBottom="12dp"
@@ -55,7 +69,7 @@
     <TextView
         android:id="@+id/tvEventDate"
         android:layout_width="109dp"
-        android:layout_height="23dp"
+        android:layout_height="25dp"
         android:layout_marginStart="42dp"
         android:layout_marginEnd="23dp"
         android:fontFamily="@font/roboto"
@@ -85,9 +99,9 @@
 
     <TextView
         android:id="@+id/tvEventTime"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="46dp"
+        android:layout_width="99dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="20dp"
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/roboto"
         android:text="TextView"
@@ -95,7 +109,6 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvEventDetails"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvEventDate"
         app:layout_constraintTop_toBottomOf="@+id/tvEventPoster" />
 
@@ -171,5 +184,40 @@
         app:layout_constraintBottom_toTopOf="@+id/tvEventTime"
         app:layout_constraintStart_toStartOf="@+id/tvEventAddress"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <Button
+        android:id="@+id/btRSVPoff"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="40dp"
+        android:background="@android:drawable/btn_star_big_off"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tvEventName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btRSVPon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="40dp"
+        android:background="@android:drawable/btn_star_big_on"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tvEventName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btRSVPs"
+        android:layout_width="92dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="4dp"
+        android:background="#00000000"
+        android:fontFamily="@font/roboto"
+        android:text="20"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvEventDetails"
+        app:layout_constraintStart_toEndOf="@+id/tvEventPoster" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

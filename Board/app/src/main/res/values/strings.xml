@@ -6,12 +6,14 @@
     <string name="btn_go_events">MY EVENTS</string>
     <string name="btn_find_events">EVENT BOARD</string>
     <string name="btn_post_events">POST EVENT</string>
+    <string name="btn_rsvp_events">RSVP\'D EVENTS</string>
     <string name="etEventName">Event Name</string>
     <string name="etEventAddress">Address</string>
     <string name="etEventInfo">About</string>
     <string name="etEventDate">Date</string>
     <string name="etEventTime">Time</string>
     <string name="title_activity_maps">Map</string>
+    <string name="tvRSVPs">RSVPs</string>
 
     <string-array name="distances">
         <item>5</item>

@@ -291,6 +291,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
+                docRef.update("imageRef",profilePicRef);
                 Log.d("Success_Post","Upload Successful : " + taskSnapshot.getMetadata());
                 Toast.makeText(EditProfileActivity.this, "Upload Successful", Toast.LENGTH_LONG);
             }

@@ -22,6 +22,7 @@ public class HomeActivity extends AppCompatActivity {
     private ImageButton btPostEvents;
     private ImageButton btProfile;
     private ImageButton btSignOut;
+    private ImageButton btRSVPEvents;
 
     private TextView tvHomeScreen;
 
@@ -44,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
         btPostEvents = findViewById(R.id.bt_post_events);
         btProfile = findViewById(R.id.btProfile);
         btSignOut = findViewById(R.id.ibSignout);
+        btRSVPEvents = findViewById(R.id.bt_rsvp_events);
 
         tvHomeScreen = findViewById(R.id.tvHomeScreen);
 
@@ -62,6 +64,14 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 myEvents = new Intent(HomeActivity.this, MyEventsActivity.class);
                 startActivity(myEvents);
+            }
+        });
+
+        btRSVPEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent rsvpEvents = new Intent(HomeActivity.this,RSVPEventsActivity.class);
+                startActivity(rsvpEvents);
             }
         });
 

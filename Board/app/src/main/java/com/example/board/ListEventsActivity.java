@@ -107,7 +107,7 @@ public class ListEventsActivity extends AppCompatActivity {
                 mImagesURL.clear();
                 eventsQuery.clear();
                 mDistances.clear();
-                distance = Double.parseDouble(tvDistance.getText().toString()) * 0.72;
+                distance = Double.parseDouble(tvDistance.getText().toString());
                 getBoundingCoord();
             }
         });
@@ -131,8 +131,13 @@ public class ListEventsActivity extends AppCompatActivity {
                         GeoLocation eventLocation = GeoLocation.fromDegrees(eventLat,eventLng);
                         distanceTo = myLocation.distanceTo(eventLocation,RADIUS);
                         Log.i("eventQuery",document.getData().get("eventName").toString() + " Distance:" + distanceTo);
+                        /*
                         if(eventLat > boundingCoords[0].getLatitudeInDegrees() &&
-                        eventLat < boundingCoords[1].getLatitudeInDegrees()){
+                        eventLat < boundingCoords[1].getLatitudeInDegrees())
+
+                         */
+
+                        if(distanceTo < distance){
                             Log.i("eventQuery", document.getId() + "=>" + document.getData());
                             eventsQuery.add(document);
                         }
@@ -169,7 +174,7 @@ public class ListEventsActivity extends AppCompatActivity {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mNames,mImagesURL,mDetails,mDistances,eventsQuery);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager mLinearLayout = new LinearLayoutManager(this);
-        mLinearLayout.setReverseLayout(true);
+        mLinearLayout.setReverseLayout(false);
         recyclerView.setLayoutManager(mLinearLayout);
     }
 

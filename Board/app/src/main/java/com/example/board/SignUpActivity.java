@@ -164,6 +164,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         userName.put("lastName", lastName);
                                         userName.put("about","Nothing Yet!");
                                         userName.put("area","None Yet!");
+                                        userName.put("imageRef","gs://boardapphht.appspot.com/images/party-hat.png");
                                         db.collection("users").document(user.getUid()).set(userName)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override

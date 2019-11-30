@@ -14,12 +14,14 @@ import android.util.Log;
 
 
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +37,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MyEventsActivity extends AppCompatActivity {
+import org.w3c.dom.Text;
+
+public class RSVPEventsActivity extends AppCompatActivity {
 
 
     private static final String TAG = "ListEvents";
@@ -45,7 +49,7 @@ public class MyEventsActivity extends AppCompatActivity {
     private ArrayList<String> mDistances = new ArrayList<>();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ArrayList<QueryDocumentSnapshot> eventsQuery;
+    private ArrayList<DocumentSnapshot> eventsQuery;
     public FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     private final double RADIUS = 3958.8;
@@ -59,7 +63,8 @@ public class MyEventsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_events);
-        eventsQuery = new ArrayList<>();
+        TextView tvRSVPEvents = findViewById(R.id.textView6);
+        tvRSVPEvents.setText(getString(R.string.btn_rsvp_events));
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLocationPermission();
@@ -67,32 +72,47 @@ public class MyEventsActivity extends AppCompatActivity {
     }
 
     private void getEvents(){
+        eventsQuery = new ArrayList<>();
         //Todo: fix constraints
-        db.collection("users").document(user.getUid()).collection("events")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document: task.getResult()){
+        db.collection("users").document(user.getUid()).collection("RSVP")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        String eventId = doc.getId();
+                        String ownerId = doc.get("eventOwnerId").toString();
+                        db.collection("users").document(ownerId).collection("events").document(eventId)
+                                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot document) {
                                 Log.i("eventQuery", document.getId() + "=>" + document.getData());
                                 eventsQuery.add(document);
+                                initImageBitmaps();
                             }
-                            initImageBitmaps();
 
-                        } else {
-                            Log.i("eventQuery", "Error getting documents: " + task.getException());
-                        }
+                        });
                     }
-                });
+                }
+                else {
+                    Log.i("eventQuery", "Error getting documents: " + task.getException());
+                }
+
+            }
+        });
     }
 
     private void initImageBitmaps()
     {
+        mNames = new ArrayList<>();
+        mImagesURL = new ArrayList<>();
+        mDetails = new ArrayList<>();
+        mDistances = new ArrayList<>();
         for(int i = 0; i < eventsQuery.size(); i++){
-            QueryDocumentSnapshot doc = eventsQuery.get(i);
-            double eventLat = Double.parseDouble(doc.getData().get("eventLat").toString());
-            double eventLng = Double.parseDouble(doc.getData().get("eventLng").toString());
+            DocumentSnapshot doc = eventsQuery.get(i);
+            Log.d(TAG,doc.getData().toString());
+            double eventLat = Double.parseDouble(doc.get("eventLat").toString());
+            double eventLng = Double.parseDouble(doc.get("eventLng").toString());
             GeoLocation eventLocation = GeoLocation.fromDegrees(eventLat,eventLng);
             mDistances.add(String.format("%.2f",myLocation.distanceTo(eventLocation,RADIUS)));
             mNames.add(doc.get("eventName").toString());
@@ -150,15 +170,15 @@ public class MyEventsActivity extends AppCompatActivity {
         Log.d(TAG,"initRecyclerView: inti recycler");
         RecyclerView recyclerView = findViewById(R.id.recycler);
         recyclerView.removeAllViewsInLayout();
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mNames,mImagesURL,mDetails,mDistances,eventsQuery);
-        recyclerView.setAdapter(adapter);
+        RecyclerViewAdapterRSVP rsvpAdapter = new RecyclerViewAdapterRSVP(this,mNames,mImagesURL,mDetails,mDistances,eventsQuery);
+        recyclerView.setAdapter(rsvpAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent home = new Intent(MyEventsActivity.this,HomeActivity.class);
-        startActivity(home);
+    protected void onRestart() {
+        super.onRestart();
+        getEvents();
     }
 }

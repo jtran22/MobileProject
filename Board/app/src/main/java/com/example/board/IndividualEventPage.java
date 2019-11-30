@@ -1,5 +1,6 @@
 package com.example.board;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,12 +15,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.Collections;
+import java.util.HashMap;
 
 public class IndividualEventPage extends AppCompatActivity {
     private String eventName;
@@ -32,10 +41,12 @@ public class IndividualEventPage extends AppCompatActivity {
     private String eventId;
     private String eventUserId;
     private String eventUserName;
+    private String rsvpCount;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference imageRef;
+    private Button btRSVPs;
 
 
     @Override
@@ -64,12 +75,33 @@ public class IndividualEventPage extends AppCompatActivity {
         ImageView imEvent = findViewById(R.id.ivEventImage);
         Button btDeletePost = findViewById(R.id.btDeletePost);
         Button btEditPost = findViewById(R.id.btEditPost);
+        btRSVPs = findViewById(R.id.btRSVPs);
+        final Button btRSVPoff = findViewById(R.id.btRSVPoff);
+        final Button btRSVPon = findViewById(R.id.btRSVPon);
+
+        db.collectionGroup("RSVP").whereEqualTo("eventId",eventId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                Log.i("RSVPs",Integer.toString(queryDocumentSnapshots.size()));
+                rsvpCount = Integer.toString(queryDocumentSnapshots.size());
+                btRSVPs.setText(rsvpCount);
+            }
+        });
+
+
+
+
+
         if (user.getUid().equals(eventUserId)){
             btEditPost.setVisibility(View.VISIBLE);
-        }else btEditPost.setVisibility(View.GONE);
-        if(user.getUid().equals(eventUserId)){
             btDeletePost.setVisibility(View.VISIBLE);
-        }else btDeletePost.setVisibility(View.GONE);
+        }else{
+            btEditPost.setVisibility(View.GONE);
+            btDeletePost.setVisibility(View.GONE);
+            btRSVPoff.setVisibility(View.VISIBLE);
+        }
+
+
 
         tvEventName.setText(eventName);
         tvEventAddress.setText(eventAddress);
@@ -84,6 +116,36 @@ public class IndividualEventPage extends AppCompatActivity {
                 .asBitmap()
                 .load(imageRef)
                 .into(imEvent);
+
+        final DocumentReference rsvpDoc = db.collection("users").document(user.getUid()).collection("RSVP").document(eventId);
+        rsvpDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    btRSVPoff.setVisibility(View.GONE);
+                    btRSVPon.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        btRSVPoff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btRSVPoff.setVisibility(View.GONE);
+                btRSVPon.setVisibility(View.VISIBLE);
+                eventRSVP(rsvpDoc);
+            }
+        });
+
+        btRSVPon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btRSVPon.setVisibility(View.GONE);
+                btRSVPoff.setVisibility(View.VISIBLE);
+                unRSVP(rsvpDoc);
+            }
+        });
+
 
 
         btEditPost.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +205,32 @@ public class IndividualEventPage extends AppCompatActivity {
             }
         });
 
+        btRSVPs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent rsvpList = new Intent(getApplicationContext(),ListRSVPActivity.class);
+                rsvpList.putExtra("eventId",eventId);
+                startActivity(rsvpList);
+            }
+        });
+
         Log.d("eventInfo", eventId + " " + eventName + " " + eventAddress + " " + eventDate + " " + eventTime+ " " +eventDistance+ " " +eventDetails+ " " +eventImgRef);
+    }
+
+    private void eventRSVP(DocumentReference rsvpRef){
+        HashMap<String,Object> rsvpInfo = new HashMap<>();
+        rsvpInfo.put("eventOwnerId",eventUserId);
+        rsvpInfo.put("eventId",eventId);
+        rsvpInfo.put("userId",user.getUid());
+        rsvpRef.set(rsvpInfo);
+    }
+
+    private void unRSVP(DocumentReference rsvpRef){
+        rsvpRef.delete().addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("RSVP","Failed to delete RSVP");
+            }
+        });
     }
 }

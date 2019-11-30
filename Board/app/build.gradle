@@ -45,6 +45,7 @@ dependencies {
 
 
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
     testImplementation 'junit:junit:4.12'
     //noinspection GradleDependency
     androidTestImplementation 'androidx.test:runner:1.1.1'
