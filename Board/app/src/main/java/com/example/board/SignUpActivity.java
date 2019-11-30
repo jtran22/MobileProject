@@ -162,6 +162,8 @@ public class SignUpActivity extends AppCompatActivity {
                                         Map<String,String> userName = new HashMap<>();
                                         userName.put("firstName" , firstName);
                                         userName.put("lastName", lastName);
+                                        userName.put("about","Nothing Yet!");
+                                        userName.put("area","None Yet!");
                                         db.collection("users").document(user.getUid()).set(userName)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override

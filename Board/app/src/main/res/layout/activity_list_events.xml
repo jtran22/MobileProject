@@ -6,7 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ListEventsActivity">
 
+
+    <ImageView
+        android:id="@+id/ivEventsBoardBanner"
+        android:layout_width="419dp"
+        android:layout_height="107dp"
+        android:layout_marginTop="17dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/background_gradient" />
+
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvLat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,6 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvLng"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,10 +41,11 @@
 
     <SeekBar
         android:id="@+id/sbDistance"
+        style="@style/MySeekBar"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="55dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="19dp"
         android:max="25"
         android:min="5"
@@ -45,6 +59,7 @@
         android:layout_height="20dp"
         android:layout_marginEnd="16dp"
         android:text="5"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/sbDistance"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/sbDistance"
@@ -68,29 +83,42 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="44dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="416dp"
+        android:layout_height="584dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpdateDist"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sbDistance">
+        app:layout_constraintStart_toStartOf="parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/tvEventsBoard"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autofillHints="Distance"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="80dp"
+        android:fontFamily="@font/roboto"
+        android:text="EVENTS BOARD"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivEventsBoardBanner" />
+
+    <TextView
+        android:id="@+id/tvDistanceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto"
+        android:text="Distance"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@+id/tvEventsBoard" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

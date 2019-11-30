@@ -24,10 +24,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -63,7 +65,10 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private DocumentReference eventDocRef;
     private StorageReference eventImageRef;
     private ImageView ivUserPhoto;
+    private ImageView editShadow;
+    private ProgressBar editProgress;
     private boolean imageSelected;
+    private boolean uploading = false;
 
     private static final int CAMERA_PERMISSION_CODE = 100;
     private static final int STORAGE_PERMISSION_CODE = 101;
@@ -82,6 +87,14 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private String eventUserId;
     private Intent intent;
 
+    @Override
+    public void onBackPressed() {
+        if(!uploading) {
+            super.onBackPressed();
+        }
+        else
+            Toast.makeText(getApplicationContext(),"Edit is Uploading",Toast.LENGTH_LONG).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +109,10 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         etPostTime = findViewById(R.id.etEditEventTime);
         etPostAddress = findViewById(R.id.etEditEventAddress);
         etPostDetails = findViewById(R.id.etEditEventDetails);
+        editShadow = findViewById(R.id.ivEditShadow);
+        editProgress = findViewById(R.id.editProgressBar);
+
+
 
         eventName = intent.getStringExtra("eventName");
         eventAddress = intent.getStringExtra("eventAddress");
@@ -123,7 +140,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
         //Get user database reference
         db = FirebaseFirestore.getInstance();
-        eventDocRef = db.collection("users").document(user.getUid()).collection("events").document();
+        eventDocRef = db.collection("users").document(user.getUid()).collection("events").document(eventId);
 
         final StorageReference imageRef = storage.getReferenceFromUrl(eventImgRef);
         Glide.with(this)
@@ -182,48 +199,44 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         btConfirmEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isFilled() && user != null) {
-                    /*
-                    Map<String, Object> event = new HashMap<String, Object>();
-                    event.put("userId",user.getUid());
-                    event.put("userName",user.getDisplayName());
-                    event.put("eventName", etPostName.getText().toString());
-                    event.put("eventDate", etPostDate.getText().toString());
-                    event.put("eventTime", etPostTime.getText().toString());
-                    event.put("eventAddress",etPostAddress.getText().toString());
-                    event.put("eventDetails", etPostDetails.getText().toString());
-                    event.put("eventLat",eventLat);
-                    event.put("eventLng",eventLng);
-                    event.put("placeId",placeId);
-                    event.put("timestamp",System.currentTimeMillis());
+                if (user.getUid().equals(eventUserId)){
+                    if (isFilled() && user != null) {
+                        uploading = true;
+                        editProgress.setVisibility(View.VISIBLE);
+                        editShadow.setVisibility(View.VISIBLE);
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                    Log.i("event",event.toString());
 
-                    eventDocRef.set(event).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            eventImageRef = mStorageRef.child("images/" + user.getUid() + "/events/" + eventDocRef.getId() + ".jpg");
-                            if(imageSelected == true) {
-                                uploadPhoto(eventImageRef);
+
+                        Map<String, Object> event = new HashMap<String, Object>();
+                        event.put("eventName", etPostName.getText().toString());
+                        event.put("eventDate", etPostDate.getText().toString());
+                        event.put("eventTime", etPostTime.getText().toString());
+                        event.put("eventAddress",etPostAddress.getText().toString());
+                        event.put("eventDetails", etPostDetails.getText().toString());
+
+                        eventDocRef.update(event).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                eventImageRef = mStorageRef.child("images/" + user.getUid() + "/events/" + eventDocRef.getId() + ".jpg");
+                                if(imageSelected == true) {
+                                    uploadPhoto(eventImageRef);
+                                }else{
+                                    Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
+                                    //Todo: myevents
+                                    Intent myEvents = new Intent(EditEventActivity.this, MyEventsActivity.class);
+                                    startActivity(myEvents);
+                                }
                             }
-                            else{
-                                eventDocRef.update("imageRef","gs://boardapphht.appspot.com/images/party-hat.png");
-                                Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
-                                //Todo: myevents
-                                Intent myEvents = new Intent(EditEventActivity.this, MyEventsActivity.class);
-                                startActivity(myEvents);
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("dbupload","upload Failed ",e);
                             }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.i("dbupload","upload Failed ",e);
-                        }
-                    });
-
-                     */
+                        });
+                    }
                 }
-
             }
         });
 
@@ -419,13 +432,16 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
+                editProgress.setVisibility(View.GONE);
+                editShadow.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 Log.i("Success_Post","Upload Successful : " + taskSnapshot.getMetadata());
                 Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG);
                 eventDocRef.update("imageRef",eventImageRef.toString());
-                //Todo:Take to event, Delete image from storage
-                Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
-                Intent home = new Intent(EditEventActivity.this,MyEventsActivity.class);
-                startActivity(home);
+                //Todo:Take to event, Delete image from storage, change to service
+                Toast.makeText(getApplicationContext(),"Event Updated",Toast.LENGTH_LONG).show();
+                Intent myEvents = new Intent(EditEventActivity.this,MyEventsActivity.class);
+                startActivity(myEvents);
             }
         });
     }

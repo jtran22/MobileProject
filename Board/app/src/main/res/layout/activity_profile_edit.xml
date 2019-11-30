@@ -33,19 +33,19 @@
 
     <TextView
         android:id="@+id/tvDisplayName"
-        android:layout_width="143dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="105dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="160dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="7dp"
         android:fontFamily="@font/roboto"
         android:gravity="center"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/ivProfilePic"
+    <ImageButton
+        android:id="@+id/ibProfilePic"
         android:layout_width="203dp"
         android:layout_height="158dp"
         android:layout_marginStart="30dp"
@@ -58,13 +58,12 @@
         tools:srcCompat="@drawable/ic_panorama_gray_24dp" />
 
     <Button
-        android:id="@+id/btEditProfile"
+        android:id="@+id/btSaveProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
         android:layout_marginBottom="60dp"
         android:text="Edit Profile"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -78,15 +77,18 @@
         android:text="Area"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic" />
+        app:layout_constraintTop_toBottomOf="@+id/ibProfilePic" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvAbout"
         android:layout_width="361dp"
         android:layout_height="136dp"
         android:layout_marginStart="31dp"
         android:layout_marginTop="14dp"
         android:fontFamily="@font/roboto"
+        android:gravity="left"
+        android:hint="Tell people about you!"
+        android:inputType="textMultiLine"
         android:lines="4"
         android:maxLength="200"
         android:maxLines="4"
@@ -105,13 +107,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvArea" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvArea"
-        android:layout_width="364dp"
-        android:layout_height="51dp"
+        android:layout_width="365dp"
+        android:layout_height="69dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="11dp"
         android:fontFamily="@font/roboto"
+        android:hint="Don't put your address! General area is more than enough!"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAreaL" />
 
@@ -140,7 +143,7 @@
         android:text="Events"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintStart_toEndOf="@+id/ibProfilePic"
         app:layout_constraintTop_toBottomOf="@+id/tvDisplayName" />
 
     <TextView
@@ -153,7 +156,7 @@
         android:gravity="center"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintStart_toEndOf="@+id/ibProfilePic"
         app:layout_constraintTop_toBottomOf="@+id/tvEventsL" />
 
     <TextView

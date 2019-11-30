@@ -60,6 +60,7 @@ public class IndividualEventPage extends AppCompatActivity {
         TextView tvEventTime= findViewById(R.id.tvEventTime);
         TextView tvEventDistance= findViewById(R.id.tvEventDistance);
         TextView tvEventDetails= findViewById(R.id.tvEventDetails);
+        TextView tvEventPoster = findViewById(R.id.tvEventPoster);
         ImageView imEvent = findViewById(R.id.ivEventImage);
         Button btDeletePost = findViewById(R.id.btDeletePost);
         Button btEditPost = findViewById(R.id.btEditPost);
@@ -76,6 +77,7 @@ public class IndividualEventPage extends AppCompatActivity {
         tvEventTime.setText(eventTime);
         tvEventDistance.setText(eventDistance);
         tvEventDetails.setText(eventDetails);
+        tvEventPoster.setText("Posted By: " + eventUserName);
 
         final StorageReference imageRef = storage.getReferenceFromUrl(eventImgRef);
         Glide.with(this)

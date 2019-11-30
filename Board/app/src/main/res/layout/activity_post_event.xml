@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".PostEventActivity">
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="426dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/background_gradient" />
+
     <EditText
         android:id="@+id/etPostEventTime"
         android:layout_width="350dp"
@@ -14,8 +25,8 @@
         android:ems="10"
         android:focusable="false"
         android:fontFamily="@font/roboto"
-        android:inputType="textPersonName"
         android:hint="@string/etEventTime"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/etPostEventAddress"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -29,8 +40,8 @@
         android:ems="10"
         android:focusable="false"
         android:fontFamily="@font/roboto"
-        android:inputType="textImeMultiLine"
         android:hint="@string/etEventAddress"
+        android:inputType="textImeMultiLine"
         app:layout_constraintBottom_toTopOf="@+id/etPostEventDetails"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -46,8 +57,8 @@
         android:ems="10"
         android:focusable="false"
         android:fontFamily="@font/roboto"
-        android:inputType="textPersonName"
         android:hint="@string/etEventDate"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/etPostEventTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -62,13 +73,13 @@
         android:ems="10"
         android:fontFamily="@font/roboto"
         android:gravity="top|left"
+        android:hint="@string/etEventInfo"
         android:inputType="textMultiLine"
+        android:lines="4"
+        android:maxLength="200"
+        android:maxLines="4"
         android:scrollHorizontally="false"
         android:singleLine="false"
-        android:maxLength="200"
-        android:lines="4"
-        android:maxLines="4"
-        android:hint="@string/etEventInfo"
         app:layout_constraintBottom_toTopOf="@+id/ivEditUserPhoto"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -107,7 +118,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/etPostEventDetails"
-        tools:srcCompat="@tools:sample/backgrounds/scenic[16]" />
+        tools:srcCompat="@drawable/ic_panorama_gray_24dp" />
 
     <EditText
         android:id="@+id/etPostEventName"
@@ -116,9 +127,10 @@
         android:layout_marginTop="90dp"
         android:layout_marginBottom="15dp"
         android:ems="10"
+        android:maxLength="35"
         android:fontFamily="@font/roboto"
-        android:inputType="textPersonName"
         android:hint="@string/etEventName"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/etPostEventDate"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -139,9 +151,9 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:visibility="gone"
         android:layout_marginStart="165dp"
         android:layout_marginTop="250dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/ivPostShadow"
         app:layout_constraintTop_toTopOf="@+id/ivPostShadow">
 
@@ -153,4 +165,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tvPostEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/roboto"
+        android:text="POST EVENT"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

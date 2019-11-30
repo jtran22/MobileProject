@@ -49,9 +49,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
         String displayName = user.getDisplayName();
-
-        tvHomeScreen.setText("Hello " + displayName + "!");
-
+        if(user.getDisplayName() != null) {
+            tvHomeScreen.setText("Hello " + displayName + "!");
+        }
+        else
+            tvHomeScreen.setText("Hello!");
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
@@ -67,6 +69,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
              profile = new Intent(HomeActivity.this,ProfileActivity.class);
+             profile.putExtra("uid",user.getUid());
              startActivity(profile);
             }
         });

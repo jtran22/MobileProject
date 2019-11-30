@@ -193,6 +193,7 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
                                 uploadPhoto(eventImageRef);
                             }
                             else{
+                                eventDocRef.update("imageRef","gs://boardapphht.appspot.com/images/party-hat.png");
                                 Toast.makeText(getApplicationContext(),"Event Posted",Toast.LENGTH_LONG).show();
                                 //Todo: myevents
                                 Intent myEvents = new Intent(PostEventActivity.this, MyEventsActivity.class);
@@ -383,7 +384,7 @@ public class PostEventActivity extends AppCompatActivity implements DatePickerDi
         }
     }
 
-
+    //Todo:change to service
     private void uploadPhoto(StorageReference reference){
         // Get the data from an ImageView as bytes
         Bitmap bitmap = ((BitmapDrawable) ivUserPhoto.getDrawable()).getBitmap();

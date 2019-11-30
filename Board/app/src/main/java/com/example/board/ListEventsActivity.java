@@ -35,8 +35,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ListEventsActivity extends AppCompatActivity {
-    private TextView tvLat;
-    private TextView tvLng;
+    //private TextView tvLat;
+    //private TextView tvLng;
     private TextView tvDistance;
     private SeekBar sbDistance;
     private Button btnUpdateDist;
@@ -68,8 +68,8 @@ public class ListEventsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_events);
-        tvLat = findViewById(R.id.tvLat);
-        tvLng = findViewById(R.id.tvLng);
+        //tvLat = findViewById(R.id.tvLat);
+        //tvLng = findViewById(R.id.tvLng);
         tvDistance = findViewById(R.id.tvDistance);
         sbDistance = findViewById(R.id.sbDistance);
         btnUpdateDist = findViewById(R.id.btnUpdateDist);
@@ -78,7 +78,6 @@ public class ListEventsActivity extends AppCompatActivity {
         getLocationPermission();
         distance = 7.2;
 
-        Spinner spinner = findViewById(R.id.spinner);
 
         eventsQuery = new ArrayList<>();
 
@@ -169,7 +168,9 @@ public class ListEventsActivity extends AppCompatActivity {
         recyclerView.removeAllViewsInLayout();
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mNames,mImagesURL,mDetails,mDistances,eventsQuery);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager mLinearLayout = new LinearLayoutManager(this);
+        mLinearLayout.setReverseLayout(true);
+        recyclerView.setLayoutManager(mLinearLayout);
     }
 
 
@@ -214,8 +215,8 @@ public class ListEventsActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             mLastKnownLocation = task.getResult();
                             if (mLastKnownLocation != null){
-                                tvLat.setText(Double.toString(mLastKnownLocation.getLatitude()));
-                                tvLng.setText(Double.toString(mLastKnownLocation.getLongitude()));
+                                //tvLat.setText(Double.toString(mLastKnownLocation.getLatitude()));
+                                //tvLng.setText(Double.toString(mLastKnownLocation.getLongitude()));
                                 myLocation = GeoLocation.fromDegrees(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude());
                                 getBoundingCoord();
                             }

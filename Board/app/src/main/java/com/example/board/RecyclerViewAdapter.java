@@ -13,13 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Registry;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -82,12 +78,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 eventDetails.putExtra("eventTime",eventsQuery.get(position).getData().get("eventTime").toString());
                 eventDetails.putExtra("imageRef",eventsQuery.get(position).getData().get("imageRef").toString());
                 eventDetails.putExtra("eventDetails",eventsQuery.get(position).getData().get("eventDetails").toString());
-                eventDetails.putExtra("eventDistance",mDistance.get(position) + "mi");
+                eventDetails.putExtra("eventDistance",mDistance.get(position) + " mi");
                 mContext.startActivity(eventDetails);
 
             }
         });
     }
+
+
 
 
     @Override

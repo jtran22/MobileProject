@@ -129,14 +129,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        logoClickable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                homePageIntent = new Intent(v.getContext(), HomeActivity.class);
-                startActivity(homePageIntent);
-            }
-        });
-
     }
 
     protected void onStart(){

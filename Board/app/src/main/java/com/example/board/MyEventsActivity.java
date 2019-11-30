@@ -54,17 +54,10 @@ public class MyEventsActivity extends AppCompatActivity {
     private Location mLastKnownLocation;
     final private int LOCATION_PERMISSION_REQUEST_CODE = 103;
 
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_events);
-        Spinner spinner = findViewById(R.id.spinner);
         eventsQuery = new ArrayList<>();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
