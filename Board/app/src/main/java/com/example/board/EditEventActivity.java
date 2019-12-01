@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,6 +51,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,6 +91,11 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private String eventId;
     private String eventUserId;
     private Intent intent;
+
+    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
+    private final static String default_notification_channel_id = "Board" ;
+    final Calendar c = Calendar.getInstance();
+
 
     @Override
     public void onBackPressed() {
@@ -220,6 +230,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                             @Override
                             public void onSuccess(Void aVoid) {
                                 eventImageRef = mStorageRef.child("images/" + user.getUid() + "/events/" + eventDocRef.getId() + ".jpg");
+                                updateLabel();
                                 if(imageSelected == true) {
                                     uploadPhoto(eventImageRef);
                                 }else{
@@ -276,9 +287,10 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar c = Calendar.getInstance();
+        //Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
+        c.set(Calendar.SECOND,0);
         String currentTimeString = DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
         etPostTime.setText(currentTimeString);
         eventTime = currentTimeString;
@@ -286,7 +298,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
+        //Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR,year);
         c.set(Calendar.MONTH,month);
         c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
@@ -444,5 +456,31 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                 startActivity(myEvents);
             }
         });
+    }
+
+    private void scheduleNotification (Notification notification , long time) {
+        Intent notificationIntent = new Intent( this, MyNotificationsPublisher.class ) ;
+        notificationIntent.putExtra(MyNotificationsPublisher. NOTIFICATION_ID , 1 ) ;
+        notificationIntent.putExtra(MyNotificationsPublisher. NOTIFICATION , notification) ;
+        PendingIntent pendingIntent = PendingIntent. getBroadcast ( this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+        assert alarmManager != null;
+
+        Log.i("Notification", "notification scheduled for " + (time));
+        alarmManager.set(AlarmManager.RTC_WAKEUP , time , pendingIntent) ;
+    }
+    private Notification getNotification () {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
+        builder.setContentTitle( "Board Event" ) ;
+        builder.setContentText("Your event " + etPostName.getText().toString() + " is about to begin!") ;
+        builder.setSmallIcon(R.drawable.logo ) ;
+        builder.setAutoCancel( true ) ;
+        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+        return builder.build() ;
+    }
+    private void updateLabel () {
+        Date date = c.getTime() ;
+        Log.i("Notification", Long.toString(date.getTime()));
+        scheduleNotification(getNotification(), date.getTime());
     }
 }

@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
     private String uid;
     private Intent prevIntent;
     private Bitmap bMapScaled;
+    private ProgressBar postProgress;
+
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -70,6 +73,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvRSVPCount = findViewById(R.id.tvRSVPCount);
         prevIntent = getIntent();
         uid = prevIntent.getStringExtra("uid");
+        postProgress = findViewById(R.id.postProgressBar);
+        postProgress.setVisibility(View.VISIBLE);
 
         DocumentReference docRef = db.collection("users").document(uid);
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -119,14 +124,12 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        docRef.collection("RSVPs").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        docRef.collection("RSVP").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 tvRSVPCount.setText(Integer.toString(queryDocumentSnapshots.size()));
             }
         });
-
-
 
         final long ONE_MEGABYTE = 1024*1024;
         profilePicRef.getBytes(5 * ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -136,11 +139,14 @@ public class ProfileActivity extends AppCompatActivity {
                 // Resize the bitmap to 150x100 (width x height)
                 bMapScaled = Bitmap.createScaledBitmap(image, ivProfilePic.getWidth(), ivProfilePic.getHeight(), true);
                 ivProfilePic.setImageBitmap(bMapScaled);
+                postProgress.setVisibility(View.GONE);
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("Get Pic Fail", e.getMessage());
+                postProgress.setVisibility(View.GONE);
             }
         });
     }

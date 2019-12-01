@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,6 +41,8 @@ public class ListEventsActivity extends AppCompatActivity {
     private TextView tvDistance;
     private SeekBar sbDistance;
     private Button btnUpdateDist;
+    private ProgressBar postProgress;
+
 
     private double distance;
     //3.6 = 5 mile radius, distance * 0.72
@@ -73,6 +76,8 @@ public class ListEventsActivity extends AppCompatActivity {
         tvDistance = findViewById(R.id.tvDistance);
         sbDistance = findViewById(R.id.sbDistance);
         btnUpdateDist = findViewById(R.id.btnUpdateDist);
+        postProgress = findViewById(R.id.postProgressBar);
+
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLocationPermission();
@@ -117,6 +122,7 @@ public class ListEventsActivity extends AppCompatActivity {
 
     private void getEvents(){
         //Todo: fix constraints
+        postProgress.setVisibility(View.VISIBLE);
         db.collectionGroup("events")
                 .whereGreaterThanOrEqualTo("eventLng",boundingCoords[0].getLongitudeInDegrees())
                 .whereLessThanOrEqualTo("eventLng",boundingCoords[1].getLongitudeInDegrees())
@@ -168,6 +174,7 @@ public class ListEventsActivity extends AppCompatActivity {
 
     private void initRecyclerView()
     {
+        postProgress.setVisibility(View.GONE);
         Log.d(TAG,"initRecyclerView: inti recycler");
         RecyclerView recyclerView = findViewById(R.id.recycler);
         recyclerView.removeAllViewsInLayout();

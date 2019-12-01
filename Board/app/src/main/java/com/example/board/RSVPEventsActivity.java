@@ -12,7 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 
-
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -59,13 +60,17 @@ public class RSVPEventsActivity extends AppCompatActivity {
     private Location mLastKnownLocation;
     final private int LOCATION_PERMISSION_REQUEST_CODE = 103;
 
+    private ProgressBar postProgress;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_events);
         TextView tvRSVPEvents = findViewById(R.id.textView6);
         tvRSVPEvents.setText(getString(R.string.btn_rsvp_events));
-
+        postProgress = findViewById(R.id.postProgressBar);
+        postProgress.setVisibility(View.VISIBLE);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLocationPermission();
 
@@ -167,6 +172,7 @@ public class RSVPEventsActivity extends AppCompatActivity {
 
     private void initRecyclerView()
     {
+        postProgress.setVisibility(View.GONE);
         Log.d(TAG,"initRecyclerView: inti recycler");
         RecyclerView recyclerView = findViewById(R.id.recycler);
         recyclerView.removeAllViewsInLayout();

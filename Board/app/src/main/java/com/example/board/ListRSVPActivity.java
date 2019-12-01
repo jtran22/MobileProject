@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,17 +34,20 @@ public class ListRSVPActivity extends AppCompatActivity {
     private String eventId;
     Intent prevIntent;
 
+    private ProgressBar postProgress;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_events);
         TextView tvRSVPL = findViewById(R.id.textView6);
         tvRSVPL.setText(getString(R.string.tvRSVPs));
+        postProgress = findViewById(R.id.postProgressBar);
+        postProgress.setVisibility(View.VISIBLE);
         prevIntent = getIntent();
         eventId = prevIntent.getStringExtra("eventId");
         getRSVP();
-
-
     }
 
     private void getRSVP(){
@@ -75,6 +80,7 @@ public class ListRSVPActivity extends AppCompatActivity {
 
     private void initRecyclerView()
     {
+        postProgress.setVisibility(View.GONE);
         Log.d("RSVPs","initRecyclerView: inti recycler");
         RecyclerView recyclerView = findViewById(R.id.recycler);
         recyclerView.removeAllViewsInLayout();
